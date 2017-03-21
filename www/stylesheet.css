@@ -1,0 +1,120 @@
+/*
+     FILE ARCHIVED ON 11:51:10 Mar 29, 2006 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 20:51:04 Nov 14, 2016.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+*/
+/* Profile CSS Document */  
+
+div.topDiv {
+  position: absolute;
+  visibility: hidden;
+  z-index: 100;
+  /*align: center;*/
+}
+
+a.topLinks {
+  font-color: white;
+}
+
+table.topTable {
+  width: 800;
+  border: 0;
+  text-align: center;
+  padding: 5;
+  background-color: 003399;
+}
+
+table.topTable-searchTheWeb {
+  text-align: left;
+  font-color: white;
+  font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+  font-size: 10px;
+  background-color: #E0FFFF;
+}
+
+input[type=text]-[type=submit] {
+  font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+  font-size: 10px;
+}
+
+input[type=text] {
+  size=25;
+}
+
+input[type=submit] {
+  background-color: #e0ffff;
+}
+
+div.nav {
+  border: 0;
+  width: 800;
+  padding: 0;
+  height:26;
+  text-align: center;
+  vertical-align: middle;
+  background-color: #6698cb;
+  font-family: Arial, Helvetica, sans-serif;
+  font-color: #000000;
+}
+
+table.asl {
+  width: 800;
+  padding: 0;
+  content-align: center;
+  
+}
+
+table.asl2 {
+  width: 300;
+  padding: 0;
+  horizontal-align: center;
+  vertical-align: middle;
+  text-align: left;
+}
+
+span.nametext {
+  width: 275;
+  height: 33;
+  text-align: center;
+  vertical-align: top;
+}
+
+  
+  .section {border:0;}
+    .heading {background:none; color:inherit;}
+  
+  #profile_networking .cols th{width:100%;}
+
+    #profile_contact a {display:block;}
+
+  #mainLayout {background:inherit; color:inherit;}
+   #mainLayout {margin-left:20px;}
+  *html #mainLayout {margin-left:22px;}
+  #mainLayout td {padding-right:15px;}
+
+  
+  #mainLayout, #mainLayout td {vertical-align:top;}
+  #mainLayout {border-collapse:separate; margin-top:5px;}
+  
+  #profile_schools .cols th, #profile_companies .cols th {width:auto;}
+  #profile_schools .cols td, #profile_companies .cols td {width:50px; text-align:center;}
+  
+  #profile_info .heading {font-size:1.55em; font-weight:bold; padding-left:0;}
+    #profile_info_image, #profile_info_content {float:left;}
+    #profile_info_image {width:175px;}
+    #profile_info_content {width:115px;}
+  #profile_info_image img {margin-bottom:20px;}
+
+    #profile_blog_subjects {list-style:none; margin:0; padding:0;}
+  
+  #profile_calendar .cols th {width:125px;}
+  #profile_contact img{vertical-align:middle;}
+  #profile_contact a {float:left; width:49%; font-size:0.8em;}
+  .friend {float:left; width:108px; margin-bottom:10px; text-align:center;}
+  *html .friend {display:inline;}
+  #profile_network {text-align:center; font-weight:bold; padding:5px 0;}
+  
+  .advertiserProfile #header {height:auto;}
