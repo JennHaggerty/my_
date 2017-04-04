@@ -121,7 +121,7 @@ var archive = function (comments) {
   <b>[<a href="">View All Blog Entires</a>]</b>
 `;
 
-//generates an RSS feed
+//subscribes to an RSS feed
 var subscribe = `
   <div>
     <b>
