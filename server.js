@@ -4,13 +4,20 @@ var knex = require('knex')(config); // database connector/driver
 var express = require('express'); // web server
 var app = express(); // web server instance
 var moment = require('moment');
-
+var users = require('./routes/users');
+var multer  = require('multer');
+var upload = multer(); // for parsing multipart/form-data
 // first-attempt.
 //var blog  = require('./blog'); // rudimentary server-side template example
 //       res.send(blog.buildLatestCommentsHtml(comments))
-
 app.set('views', './templates')
 app.set('view engine', 'pug')
+// CREATE, READ, UPDATE, DELETE users
+//app.get('/users/add', users.add); //add new user
+//app.post('/users/add', users.save); //save new user
+//app.get('/users/delete/:url', users.deleteUser); //deletes user
+app.get('/users/edit/:url', users.edit); //edit user
+//app.post('/users/edit/:url', users.saveEdit); //commits changes to user
 
 /* web server routes */
 // Route for 'GET /' (AKA also /index.html, /index.htm).
@@ -56,67 +63,77 @@ app.get('/:url', function (req, res, next) {
 		//comments
 		var comments = user.comments;
 		var latestComments = user.latestComments;
-
-		console.log('shows', user.galleryShows)
+		var totalComments = user.totalComments;
+		var about = user.about;
+		var meet = user.meet;
 
 		// will begin another data inquiry, further inquiries must continue the nesting with res.render going INTO THE LAST ONE.
 		knex.select().from('blog').where('owner', user.id).orderBy('date', 'desc').then(function(comments) {
-			var latestComments = comments.slice(0, 6);
-			var comment = comments;
+			if (comments !== null) {
+				var latestComments = comments.slice(0, 6);
+				var comment = comments;
+				var totalComments = comments.length;
+				var lastLogin = moment(comments.slice(0)[0].date).format('MM/DD/YYYY');
 
-			comments = comments.map(function(comment) {
-				comment.date = moment(comment.date).format('MMMM DD, YYYY hh:mm A');
-				return comment;
-			})
-
-			knex.select().from('galleryShows').then(function(galleryShows)	{
-				var shows = galleryShows;
-				shows = shows.map(function(show) {
-					show.startDate = moment(show.startDate).format('MM/DD/YYYY');
-					show.endDate = moment(show.endDate).format('MM/DD/YYYY');
-					return show;
+				comments = comments.map(function(comment) {
+					comment.date = moment(comment.date).format('MMMM DD, YYYY hh:mm A');
+					return comment;
 				})
+			};
+				
+				knex.select().from('galleryShows').then(function(galleryShows)	{
+					var shows = galleryShows;
+					shows = shows.map(function(show) {
+						show.startDate = moment(show.startDate).format('MM/DD/YYYY');
+						show.endDate = moment(show.endDate).format('MM/DD/YYYY');
+						return show;
+					});
+						
+					var myData = {
+						//user info
+						userName: userName,
+						userSex: userSex,
+						userAge: userAge,
+						city: city,
+						state: state,
+						lastLogin: lastLogin,
+						//user interests
+						general: general,
+						music: music,
+						movies: movies,
+						television: television,
+						books: books,
+						heroes: heroes,
+						//user details
+						status: status,
+						hereFor: hereFor,
+						hometown: hometown,
+						bodyType: bodyType,
+						ethnicity: ethnicity,
+						sign: sign,
+						smoke: smoke,
+						drink: drink,
+						education: education,
+						occupation: occupation,
+						//user experience
+						shows: shows,
+						prints: prints,
+						schools: schools,
+						//comments
+						latestComments: latestComments,
+						comments: comments,
+						totalComments: totalComments,
+						about: about,
+						meet: meet
+					}
 
-				var myData = {
-					//user info
-					userName: userName,
-					userSex: userSex,
-					userAge: userAge,
-					city: city,
-					state: state,
-					//user interests
-					general: general,
-					music: music,
-					movies: movies,
-					television: television,
-					books: books,
-					heroes: heroes,
-					//user details
-					status: status,
-					hereFor: hereFor,
-					hometown: hometown,
-					bodyType: bodyType,
-					ethnicity: ethnicity,
-					sign: sign,
-					smoke: smoke,
-					drink: drink,
-					education: education,
-					occupation: occupation,
-					//user experience
-					shows: shows,
-					prints: prints,
-					schools: schools,
-					//comments
-					latestComments: latestComments,
-					comments: comments
-				}
 
-				res.render('user', myData);
-			});
+					res.render('user', myData);				
+				});
 			// feed 'myData' to the 'user'(.pug) template.
 			//	//will allow the page to render, waiting for ALL queries to finish before spitting out ALL the information requested.
 			//res.render('user', myData);
-		});
+		});	
 	})
   // do something with error, maybe even just:
 	.catch(console.log)
