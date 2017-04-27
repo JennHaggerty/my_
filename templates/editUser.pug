@@ -15,6 +15,9 @@ html
 			li.active Dashboard
 		.container
 			.col-lg-3
+				if noUser
+					p No user with URL found.. #{url}. MAKE ONE NAO!! ...
+
 				//EDIT USER DETAILS
 				table
 					thead
@@ -24,7 +27,7 @@ html
 								.pull-right
 									span.glyphicon.glyphicon-triangle-bottom
 					tbody.collapse(id='details')
-						form(id='editForm' method='GET' action='/users/edit/'+ userUrl)
+						form(id='userEditForm' method='GET' action='/users/edit/' + url)
 							tr.form-group
 								td.title
 									label(for='name') Name
@@ -143,21 +146,21 @@ html
 								td
 									input#occupation.form-control(type='text', value=occupation, name='occupation')
 							tr
-								td.title
-								td.title
-									button.btn(type='submit') Submit Changes
+								td
+									input(type='hidden', name='form_type', value='user')
+								td
+									center
+										button.btn(type='submit') Submit Edits
 
 				//ADD SCHOOL
 				table
 					thead
-						th(data-toggle='collapse', href='#schools', aria-controls='schools') Add School
-						th(data-toggle='collapse', href='#schools', aria-controls='schools')
+						th(data-toggle='collapse', href='#addSchool', aria-controls='addSchool') Add School
+						th(data-toggle='collapse', href='#addSchool', aria-controls='addSchool')
 							.pull-right
 								span.glyphicon.glyphicon-triangle-bottom
-					tbody.collapse(id='schools')
-						form(id='schoolForm' method='GET' action='/users/edit/#{user.url}')
-							th 
-							th 
+					tbody.collapse(id='addSchool')
+						form(id='addSchoolForm' method='GET' action='/users/edit/' + url)
 							tr.form-group
 								td.title
 									label(for='schoolName') School Name
@@ -165,12 +168,22 @@ html
 									input#schoolName.form-control(type='text', name='schoolName')
 							tr.form-group
 								td.title
+									label(for='city') City
+								td
+									input#city.form-control(type='text', name='city')
+							tr.form-group
+								td.title
+									label(for='state') State
+								td
+									input#state.form-control(type='text', name='state')
+							tr.form-group
+								td.title
 									label(for='schoolUrl') School URL
 								td
 									input#schoolUrl.form-control(type='text', name='schoolUrl')
 							tr.form-group
 								td.title
-									label(for='gradYear') Graduation Year
+									label(for='gradYear') Graduation Year ('YYYY')
 								td
 									input#gradYear.form-control(type='text', name='gradYear')
 							tr.form-group
@@ -190,52 +203,205 @@ html
 									input#major.form-control(type='text', name='major')
 							tr.form-group
 								td.title
-									label(for='yearStarted') Year Started
+									label(for='yearStarted') Year Started ('YYYY-MM-DD')
 								td
 									input#yearStarted.form-control(type='text', name='yearStarted')
 							tr.form-group
 								td.title
-									label(for='yearFinished') Year Finished
+									label(for='yearFinished') Year Finished ('YYYY-MM-DD')
 								td
 									input#yearFinished.form-control(type='text', name='yearFinished')
 							tr
 								td.title
+									input(type='hidden', name='form_type', value='school')
 								td.title
-									button.btn(type='submit') Add Entry
-				
-		//		//ADD SHOW
-		//		table
-		//			thead
-		//				th
-		//				th
-		//			tbody
-		//				form(id='editForm' method='GET' action='/users/edit/:url')
-		//					th Add Showing
-		//					th 
-		//						.pull-right
-		//							span.glyphicon.glyphicon-triangle-bottom
-		//					tr.form-group
-		//						td.title
-		//							label(for='name') Name
-		//						td
-		//							input#name.form-control(type='text', value=name, name='name')
-		//		
-		//		//ADD PRINT
-		//		table
-		//			thead
-		//				th
-		//				th 
-		//			tbody
-		//				form(id='editForm' method='GET' action='/users/edit/:url')
-		//					th Add Print
-		//					th
-		//						.pull-right
-		//							span.glyphicon.glyphicon-triangle-bottom
-		//					tr.form-group
-		//						td.title
-		//							label(for='name') Name
-		//						td
-		//							input#name.form-control(type='text', value=name, name='name')
+									center
+										button.btn(type='submit') Add Entry
+
+				//ALL SCHOOLS
+				table
+					thead
+						tr
+							th(data-toggle='collapse', href='#schools', aria-controls='schools') Schools
+							th(data-toggle='collapse', href='#schools', aria-controls='schools')
+							th(data-toggle='collapse', href='#schools', aria-controls='schools')
+								.pull-right
+									span.glyphicon.glyphicon-triangle-bottom
+					tbody.collapsed(id='schools')
+						form(id='deleteSchoolForm' method='GET' action='/users/edit/' + url)
+							for school in schools
+								tr
+									td.extra.form-group
+											a(href=school.schoolUrl) #{school.schoolName} 
+											br
+											| #{school.city}, #{school.state}
+											br
+											| Grad Year: #{school.gradYear} 
+											br
+											| Student Status:#{school.studentStatus}
+											br
+											| Degree: #{school.degree}
+											br
+											| Major: #{school.major}
+									td 
+										center
+											| From #{school.yearStarted}
+											br
+											| to
+											br
+											|#{school.yearFinished}
+									td.title
+										input(type='checkbox')
+										input(type='hidden', name='school_id', value=school.id)
+							tr
+								td 
+									input(type='hidden', name='form_type', value='deleteSchoolForm')
+								td
+									.pull-right
+										button.btn(type='submit') Delete Entries
+								td
+
+				//ADD SHOW
+				table
+					thead
+						th(data-toggle='collapse', href='#addShow', aria-controls='addShow') Add Show
+						th(data-toggle='collapse', href='#addShow', aria-controls='addShow')
+							.pull-right
+								span.glyphicon.glyphicon-triangle-bottom
+					tbody.collapse(id='addShow')
+						form(id='addSchoolForm' method='GET' action='/users/edit/' + url)
+							tr.form-group
+								td.title
+									label(for='title') Show Title
+								td
+									input#title.form-control(type='text', name='title')
+							tr.form-group
+								td.title
+									label(for='venueName') Venue Name
+								td
+									input#venueName.form-control(type='text', name='venueName')
+							tr.form-group
+								td.title
+									label(for='venueLink') Link to Venue
+								td
+									input#venueLink.form-control(type='text', name='venueLink')
+							tr.form-group
+								td.title
+									label(for='location') City, ST
+								td
+									input#location.form-control(type='text', name='location')
+							tr.form-group
+								td.title
+									label(for='showType') Show Type 
+									br
+									| (group show, solo show, etc)
+								td
+									input#showType.form-control(type='text', name='showType')
+							tr.form-group
+								td.title
+									label(for='showDate') Date Shown (YYYY/MM/DD)
+								td
+									input#showDate.form-control(type='text', name='showDate')
+							tr
+								td.title
+									input(type='hidden', name='form_type', value='show')
+								td.title
+									center
+										button.btn(type='submit') Add Entry
+
+				//ALL SHOWS
+				table
+					thead
+						tr
+							th(data-toggle='collapse', href='#shows', aria-controls='shows') Shows
+							th(data-toggle='collapse', href='#shows', aria-controls='shows')
+								.pull-right
+									span.glyphicon.glyphicon-triangle-bottom
+					tbody.collapse(id='shows')
+						for show in shows
+							tr
+								td.extra
+									| #{show.title} 
+									br
+									a(href=show.venueLink) #{show.venueName}
+									br
+									| #{show.location}
+									br
+									| #{show.showType}
+								td 
+									center
+										| #{show.showDate}
+
+				//ADD PRINT
+				table
+					thead
+						th(data-toggle='collapse', href='#addPrint', aria-controls='addPrint') Add Print
+						th(data-toggle='collapse', href='#addPrint', aria-controls='addPrint')
+							.pull-right
+								span.glyphicon.glyphicon-triangle-bottom
+					tbody.collapse(id='addPrint')
+						form(id='addPrintForm' method='GET' action='/users/edit/' + url)
+							tr.form-group
+								td.title
+									label(for='seriesName') Series Title
+								td
+									input#seriesName.form-control(type='text', name='seriesName')
+							tr.form-group
+								td.title
+									label(for='printName') Publication Name
+								td
+									input#printName.form-control(type='text', name='printName')
+							tr.form-group
+								td.title
+									label(for='printUrl') Link to Publication
+								td
+									input#printUrl.form-control(type='text', name='printUrl')
+							tr.form-group
+								td.title
+									label(for='location') City, ST
+								td
+									input#location.form-control(type='text', name='location')
+							tr.form-group
+								td.title
+									label(for='printType') Print Type 
+									br
+									| (cover, editorial, etc)
+								td
+									input#printType.form-control(type='text', name='printType')
+							tr.form-group
+								td.title
+									label(for='printDate') Date Printed (YYYY/MM/DD)
+								td
+									input#printDate.form-control(type='text', name='printDate')
+							tr
+								td.title
+									input(type='hidden', name='form_type', value='print')
+								td.title
+									center
+										button.btn(type='submit') Add Entry
+
+					//ALL PRINTS
+					table
+						thead
+							tr
+								th(data-toggle='collapse', href='#prints', aria-controls='prints') In Print
+								th(data-toggle='collapse', href='#prints', aria-controls='prints')
+									.pull-right
+										span.glyphicon.glyphicon-triangle-bottom
+						tbody.collapsed(id='prints')
+							for print in prints
+								tr
+									td.extra
+										| #{print.seriesName} 
+										br
+										a(href=print.printUrl) #{print.printName}
+										br
+										| #{print.location}
+										br
+										| #{print.printType}
+									td 
+										center
+											| #{print.printDate}
 //
 		//	.col-md-6
 		//		table

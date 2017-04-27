@@ -33,26 +33,23 @@ html
 						a.top Help
 					center 
 						a.top Search
-
-				.container
-					center 
-						h1 insert banners here
 			
 				.container.nav
-					//a(href='#') Home
-					//a(href='#') Browse
-					//a(href='#') Search
-					//a(href='#') Invite
-					//a(href='#') Rank
-					//a(href='#') Mail
-					//a(href='#') Blog
-					//a(href='#') Favorites
-					//a(href='#') Forum
-					//a(href='#') Groups
-					//a(href='#') Events
-					//a(href='#') Videos
-					//a(href='#') Music
-					//a(href='#') Classifieds
+					center
+						a(href='#') Home
+						a(href='#') Browse
+						a(href='#') Search
+						a(href='#') Invite
+						a(href='#') Rank
+						a(href='#') Mail
+						a(href='#') Blog
+						a(href='#') Favorites
+						a(href='#') Forum
+						a(href='#') Groups
+						a(href='#') Events
+						a(href='#') Videos
+						a(href='#') Music
+						a(href='#') Classifieds
 
 		.container.body
 
@@ -160,33 +157,46 @@ html
 								th(data-toggle='collapse', href='#schools', aria-controls='schools') Schools
 								th(data-toggle='collapse', href='#schools', aria-controls='schools')
 						tbody.collapsed(id='schools')
-							tr
-								td.extra
-								td
+							for school in schools
+								tr
+									td.extra
+										a(href=school.schoolUrl) #{school.schoolName} 
+										br
+										| #{school.city}, #{school.state}
+										br
+										| Grad Year: #{school.gradYear} 
+										br
+										| Student Status: #{school.studentStatus}
+										br
+										| Degree: #{school.degree}
+										br
+										| Major: #{school.major}
+									td
+										center
+											| From #{school.yearStarted}
+											br
+											| to
+											br
+											| #{school.yearFinished}
 					table
 						thead
 							tr
 								th(data-toggle='collapse', href='#shows', aria-controls='shows') Shows
 								th(data-toggle='collapse', href='#shows', aria-controls='shows')
 						tbody.collapsed(id='shows')
-							tr
-								td.extra
-									for show in shows
+							for show in shows
+								tr
+									td.extra
 										| #{show.title} 
 										br
 										a(href=show.venueLink) #{show.venueName}
 										br
 										| #{show.location}
 										br
-										| #{show.galleryShowType}
-								td 
-									center
-										for show in shows
-											|#{show.startDate}
-											br
-											| to
-											br
-											|#{show.endDate}
+										| #{show.showType}
+									td 
+										center
+											| #{show.showDate}
 
 					table
 						thead
@@ -194,21 +204,30 @@ html
 								th(data-toggle='collapse', href='#prints', aria-controls='prints') In Print
 								th(data-toggle='collapse', href='#prints', aria-controls='prints')
 						tbody.collapsed(id='prints')
-							tr
-								td.extra
-								td
-
+							for print in prints
+								tr
+									td.extra
+										| #{print.seriesName} 
+										br
+										a(href=print.printUrl) #{print.printName}
+										br
+										| #{print.location}
+										br
+										| #{print.printType}
+									td 
+										center
+											| #{print.printDate}
 
 			//right side of page
 			.col-md-7
 				div#extended-network #{userName} is in your extended network
 
-				//most recent comments
+				//most recent posts
 				div#latest-blog-entry
 					h5 #{userName}'s Latest Blog Entry
 					- ul
-						for comment in latestComments
-							div #{comment.title} (view more)
+						for post in latestPosts
+							div #{post.title} (view more)
 					a [View All Blog Entries]
 
 				//blurbs
@@ -225,21 +244,22 @@ html
 					h5.orange #{userName}'s Friend Space
 					b #{userName} has xxx Friends.
 			
-				//all comments
-				div#comments
-					h5.orange #{userName}'s Comments
+				//all posts
+				div#posts
+					h5.orange #{userName}'s comments
 					p Displaying 15 of 
-						span.redtext #{totalComments} 
-						comments (View All Comments)
-					table.comments
+						span.redtext #{totalPosts} 
+						posts 
+						a (View All posts)
+					table.posts
 						tbody
-							for comment in comments
+							for post in posts
 								tr 
-									td.commentTitle 
+									td.postTitle 
 										center 
-											a(href=comment.link) #{comment.title}
+											a(href=post.link) #{post.title}
 											br 
-											| comment photo
-									td.comment
-										b #{comment.date}
-										p #{comment.comment}
+											| post photo
+									td.post
+										b #{post.date}
+										p #{post.post}

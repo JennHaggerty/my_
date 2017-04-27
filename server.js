@@ -9,7 +9,7 @@ var multer  = require('multer');
 var upload = multer(); // for parsing multipart/form-data
 // first-attempt.
 //var blog  = require('./blog'); // rudimentary server-side template example
-//       res.send(blog.buildLatestCommentsHtml(comments))
+//       res.send(blog.buildLatestCommentsHtml(posts))
 app.set('views', './templates')
 app.set('view engine', 'pug')
 // CREATE, READ, UPDATE, DELETE users
@@ -60,36 +60,48 @@ app.get('/:url', function (req, res, next) {
 		var shows = user.galleryShows;
 		var prints = user.prints;
 		var schools = user.schools;
-		//comments
-		var comments = user.comments;
-		var latestComments = user.latestComments;
-		var totalComments = user.totalComments;
+		//posts
+		var posts = user.posts;
+		var latestPosts = user.latestPosts;
+		var totalPosts = user.totalPosts;
 		var about = user.about;
 		var meet = user.meet;
 
 		// will begin another data inquiry, further inquiries must continue the nesting with res.render going INTO THE LAST ONE.
-		knex.select().from('blog').where('owner', user.id).orderBy('date', 'desc').then(function(comments) {
-			if (comments !== null) {
-				var latestComments = comments.slice(0, 6);
-				var comment = comments;
-				var totalComments = comments.length;
-				var lastLogin = moment(comments.slice(0)[0].date).format('MM/DD/YYYY');
+		knex.select().from('blog').where('owner', user.id).orderBy('date', 'desc').then(function(posts) {
+			if (posts !== null) {
+				var latestPosts = posts.slice(0, 6);
+				var post = posts;
+				var totalPosts = posts.length;
+				var lastLogin = moment(posts.slice(0)[0].date).format('MM/DD/YYYY');
 
-				comments = comments.map(function(comment) {
-					comment.date = moment(comment.date).format('MMMM DD, YYYY hh:mm A');
-					return comment;
+				posts = posts.map(function(post) {
+					post.date = moment(post.date).format('MMMM DD, YYYY hh:mm A');
+					return post;
 				})
 			};
 				
-				knex.select().from('galleryShows').then(function(galleryShows)	{
-					var shows = galleryShows;
-					shows = shows.map(function(show) {
-						show.startDate = moment(show.startDate).format('MM/DD/YYYY');
-						show.endDate = moment(show.endDate).format('MM/DD/YYYY');
-						return show;
+			knex.select().from('shows').orderBy('showDate', 'desc').then(function(shows)	{
+				var shows = shows;
+				shows = shows.map(function(show) {
+					show.showDate = moment(show.showDate).format('YYYY');
+					return show;
+				});
+				knex.select().from('schools').orderBy('yearFinished', 'desc').then(function(schools) {
+					var schools = schools;
+					schools = schools.map(function(school) {
+						school.yearFinished = moment(school.yearFinished).format('YYYY');
+						school.yearStarted = moment(school.yearStarted).format('YYYY');
+						return school;
 					});
-						
-					var myData = {
+					knex.select().from('prints').orderBy('printDate', 'desc').then(function(prints)	{
+						var prints = prints;
+						prints = prints.map(function(print) {
+							print.printDate = moment(print.printDate).format('YYYY');
+							return print;
+						});
+						//USER DATA	
+						var myData = {
 						//user info
 						userName: userName,
 						userSex: userSex,
@@ -119,28 +131,30 @@ app.get('/:url', function (req, res, next) {
 						shows: shows,
 						prints: prints,
 						schools: schools,
-						//comments
-						latestComments: latestComments,
-						comments: comments,
-						totalComments: totalComments,
+						//posts
+						latestPosts: latestPosts,
+						posts: posts,
+						totalPosts: totalPosts,
 						about: about,
 						meet: meet
-					}
-
-
-					res.render('user', myData);				
+						}
+	
+						//RENDER THE DATA
+						res.render('user', myData);	
+					});
 				});
 			// feed 'myData' to the 'user'(.pug) template.
 			//	//will allow the page to render, waiting for ALL queries to finish before spitting out ALL the information requested.
 			//res.render('user', myData);
-		});	
-	})
+			});	
+		})
   // do something with error, maybe even just:
-	.catch(console.log)
+		.catch(console.log)
   
 	//anything added here will spit out whether or not the queries ^ have finished, probably causing it to crash.
 	//something can go here to say don't start until ^ is finished, right? No. If something needs to wait for something else
 	//to finish, put it in the ^ scope otherwise it will run regardless if ^ is finished.
+	});
 });
 
 app.get('/', function (req, res, next) {
@@ -152,6 +166,6 @@ app.get('/', function (req, res, next) {
 app.use(express.static('www'))
 
 // Web server invocation.. starts listening for connection requests here
-app.listen(80, function () {
-  console.log('Tom is listening on port 80!')
+app.listen(3000, function () {
+  console.log('Tom is listening on port 3000!')
 });
