@@ -80,15 +80,6 @@ exports.edit = function(req, res) {
 		input = JSON.parse(JSON.stringify(req.query));
 	}
 
-
-		
-		//if (input.form_type === 'deleteSchoolForm') {
-		
-		
-		//return knex.select().table('users').where('url', url).then(usersHandler);
-	//}
-
-	// looks for and returns user
 	return knex.select().table('users').where('url', url).then(usersHandler);
 
 	function usersHandler(users) {
@@ -105,23 +96,10 @@ exports.edit = function(req, res) {
 			return res.send('404 No User');
 		}
 
-		if (input && input.form_type === 'deleteSchoolForm') {
-			//knex('schools').del()
-			
-			//return knex.del().then(function(){
-				input = user;
-			  input.form_type = 'user';
-			  
-//			  	user.schools = schools;
-					//if(input type = "checkbox" && ('checked', true){
-						knex('schools').del().where('school_id', '=', 'id').then(function(dataFromDB){
-							return res.render('editUser', user);
-						})
-						//})
-						return res.send('Unable to delete schools')
-				//call function below by name
-			//})
-		}
+		//DELETE FUNCTION HERE
+		deleteFromDB(res, url, false, function (user) {
+			return res.render('editUser', user);
+		})
 		
 		dataFromDB(res, url, false, function (user) {
 			return res.render('editUser', user);
@@ -151,7 +129,7 @@ exports.edit = function(req, res) {
 					});
 				});
 			});
-		};
+		}
 		
 	}  
 };
@@ -185,6 +163,7 @@ function databaseUpdate(res, input, user, schools, shows, prints, url) {
 	// form handler
 	if (formType === 'school') {
 		var schoolData = getSchoolDataFromInput(input);
+		debugger;
 		schoolData.userId = id;
 		//console.log('school', schoolData)
 		return knex('schools').insert(schoolData)
@@ -210,6 +189,45 @@ function databaseUpdate(res, input, user, schools, shows, prints, url) {
 			.then(function() {
 				return res.send('SUCCESS.');
 			}).catch(errorHandler(res));
+	}
+}
+
+function deleteFromDB (res, input, user, schools, shows, prints, url){
+	if (input && input.form_type === 'deleteSchoolForm') {
+		return knex('schools').del().where('id', '=', input.school_id).then(function (){
+		  dataFromDB(res, url, true, function (user) {
+				return res.render('editUser', user);
+			})
+		}).catch(function (err) {
+			console.log(err);
+			return res.send('Unable to delete schools', JSON.stringify(err,null,2))
+		})
+	}
+	
+	dataFromDB(res, url, false, function (user) {
+		return res.render('editUser', user);
+	})
+
+	if (input && input.form_type === 'deleteShowForm') {
+		return knex('shows').del().where('id', '=', input.show_id).then(function (){
+		  dataFromDB(res, url, true, function (user) {
+				return res.render('editUser', user);
+			})
+		}).catch(function (err) {
+			console.log(err);
+			return res.send('Unable to delete shows', JSON.stringify(err,null,2))
+		})
+	}
+
+	if (input && input.form_type === 'deletePrintForm') {
+		return knex('prints').del().where('id', '=', input.print_id).then(function (){
+		  dataFromDB(res, url, true, function (user) {
+				return res.render('editUser', user);
+			})
+		}).catch(function (err) {
+			console.log(err);
+			return res.send('Unable to delete prints', JSON.stringify(err,null,2))
+		})
 	}
 }
 
