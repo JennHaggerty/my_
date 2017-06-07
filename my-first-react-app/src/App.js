@@ -6,10 +6,13 @@ import Col from 'react-bootstrap/lib/Col';
 import axios from 'axios';
 import Details from './details';
 import Interests from './interests';
+//import Blurbs from './blurbs';
 import Schools from './schools';
 import Shows from './shows';
 import Prints from './prints';
 import Posts from './posts';
+
+
 
 //LOOK AT ternary operation for view and editing mode: 
 //https://www.robinwieruch.de/conditional-rendering-react/
@@ -24,7 +27,6 @@ class App extends Component {
 
   wireframe() {
     var url = window.location.hash.slice(1);
-    debugger;
     axios.get(`http://localhost:3001/` + url)
       .then(res => {
         this.setState({ user: res.data });
@@ -51,69 +53,53 @@ class App extends Component {
   
               <table><tbody>
                 <tr>
-                  <th>{user.name}'s Interests</th>
+                  <th>Interests</th>
                 </tr>
-                <Interests userId={user.id} />
               </tbody></table>
+              <Interests userId={user.id} />
 
               <table><tbody>
                 <tr>
-                  <th>{user.name}'s Details</th>
+                  <th>Details</th>
                 </tr>
-                <Details userId={user.id} />
               </tbody></table>
+              <Details userId={user.id} />
 
               <table><tbody>
                 <tr>
-                  <th>{user.name}'s Schools</th>
+                  <th>Schools</th>
                 </tr>
-                <Schools userId={user.id} />
               </tbody></table>
+              <Schools userId={user.id} />
   
               <table><tbody>
                 <tr>
-                  <th>{user.name}'s Shows</th>
+                  <th>Shows</th>
                 </tr>
-                <Shows userId={user.id} />
               </tbody></table>
+              <Shows userId={user.id} />
   
               <table><tbody>
                 <tr>
-                  <th>{user.name}'s Prints</th>
+                  <th>Prints</th>
                 </tr>
-                <Prints userId={user.id} />
               </tbody></table>
+              <Prints userId={user.id} />
             </Col>
     
             <Col md={7}>
               <div id = "extended-network">
                 {user.name} is in your extended network.
               </div>
-  
-              <table><tbody>
-                <tr>
-                  <th>{user.name}'s Latest Blog Entry[Subscribe to this Blog]</th>
-                </tr>
-                  
-                <tr>
-                  <th>[View All Blog Entries]</th>
-                </tr>
-              </tbody></table>
-  
-              <div id = "blurbs">
-               {user.about},
-               {user.meet}
-              </div>
-  
-              <div id = "friends">
-              </div>
+
+          
 
               <table><tbody>
                 <tr>
-                  <th>{user.name}'s Comments</th>
+                  <th>Comments</th>
                 </tr>
-                <Posts userId={user.id} />
               </tbody></table>
+              <Posts userId={user.id} />
             </Col>
           </Row>
         </Grid>

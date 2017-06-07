@@ -25,9 +25,9 @@ export default class Interests extends Component {
       return (
         <div id="interests">
           {
-            this.state.interests.map(interest => {
+            this.state.interests.map((interest, index) => {
               return (
-                <table><tbody>
+                <table key={index}><tbody>
                   <tr>
                     <td>General</td>
                     <td>{ interest.general }</td>

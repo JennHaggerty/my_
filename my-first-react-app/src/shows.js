@@ -26,9 +26,9 @@ export default class Shows extends Component {
         <div id="shows">
           <table><tbody>
           {
-            this.state.shows.map(show => {
+            this.state.shows.map((show, index) => {
               return (
-                <tr>
+                <tr key={index}>
                   <td>
                     { show.title }<br/>
                     {show.showType} at <a href='{show.venueUrl}'>{show.venueName}</a><br/>

@@ -26,9 +26,9 @@ export default class Schools extends Component {
         <div id="schools">
           <table><tbody>
           {
-            this.state.schools.map(school => {
+            this.state.schools.map((school, index) => {
               return (
-                <tr>
+                <tr key={index}>
                   <td>
                     <a href='{school.schoolUrl}'>{ school.schoolName }</a><br/>
                     {school.city}, {school.state}<br/>

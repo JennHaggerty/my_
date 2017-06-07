@@ -25,9 +25,9 @@ export default class Details extends Component {
       return (
         <div id="details">
           {
-            this.state.details.map(detail => {
+            this.state.details.map((detail, index) => {
               return (
-                <table><tbody>
+                <table key={index}><tbody>
                   <tr>
                     <td>Status:</td>
                     <td>{ detail.status }</td>

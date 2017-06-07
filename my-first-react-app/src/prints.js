@@ -26,9 +26,9 @@ import axios from 'axios';
         <div id="prints">
           <table><tbody>
           {
-            this.state.prints.map(print => {
+            this.state.prints.map((print, index) => {
               return (
-                <tr>
+                <tr key={index}>
                   <td>
                     {print.title}<br/>
                     <a href='{print.publicationUrl}'>{print.publication}</a><br/>
