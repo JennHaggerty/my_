@@ -69,6 +69,19 @@ function getDetails(req, res, next) {
 	});
 }
 
+function getBlurbs(req, res, next) {
+	var userId = req.params.userId;
+	knex.select().from('blurbs').where('userId', userId).then(function(blurbs) {
+		blurbs = blurbs.map(function(blurb) {
+			var _blurb = {};
+			_blurb.about = blurb.about;
+			_blurb.meet = blurb.meet
+			return _blurb;
+		})
+		res.send(blurbs);
+	});
+}
+
 function getShows(req, res, next) {
 	var userId = req.params.userId;
 	knex.select().from('shows').where('userId', userId).then(function(shows) {
@@ -124,6 +137,7 @@ module.exports = {
    getUsers,
    getDetails,
    getInterests,
+   getBlurbs,
    getPosts,
    getSchools,
    getShows,
