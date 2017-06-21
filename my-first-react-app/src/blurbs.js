@@ -12,7 +12,6 @@ export default class Blurbs extends Component {
   getBlurbs() {
     axios.get(`http://localhost:3001/blurbs/` + this.props.userId)
       .then(res => {
-        debugger;
         this.setState({ blurbs: res.data });
       });
   }
@@ -30,12 +29,16 @@ export default class Blurbs extends Component {
               return (
                 <table key={index}><tbody>
                   <tr>
-                    <td>About</td>
-                    <td>{ blurb.about }</td>
+                    <td>
+                      About <br/>
+                      { blurb.about }
+                    </td>
                   </tr>
                   <tr>
-                    <td>Who I'd like to meet</td>
-                    <td>{ blurb.meet }</td>
+                    <td>
+                      Who I'd like to meet<br/>
+                      { blurb.meet }
+                    </td>
                   </tr>
                 </tbody></table>
               );

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import axios from 'axios';
 import Blurbs from './blurbs';
+import Friends from './friends';
 
 export default class Posts extends Component {
   constructor(props) {
@@ -17,8 +18,8 @@ export default class Posts extends Component {
     axios.get(`http://localhost:3001/posts/` + this.props.userId)
       .then(res => {
         self.setState({ 
-          posts: res.data//,
-         // total: res.data.length
+          posts: res.data,
+          total: res.data.length
         });
       });
   }
@@ -41,7 +42,7 @@ export default class Posts extends Component {
                 return (
                   <tr key={index}>
                     <td>
-                      {post.title} (<a href='{post.postUrl}'>view more</a>)<br/>
+                      {post.title} (<a href='[{post.postUrl}]'>view more</a>)<br/>
                     </td>
                   </tr>
                 );
@@ -54,9 +55,11 @@ export default class Posts extends Component {
           </div>
 
           <div id="blurbs">
+            <Blurbs userId={this.state.user} />
+          </div>
 
-                <Blurbs userId={this.state.user} />
-
+          <div id="friends">
+            <Friends userId={this.state.user} />
           </div>
 
           <div id="posts">
@@ -73,7 +76,7 @@ export default class Posts extends Component {
                 return (
                   <tr key={index}>
                     <td>
-                      <a href='{post.postUrl}'>{post.title}</a><br/>
+                      <a href='[{post.postUrl}]'>{post.title}</a><br/>
                       IMAGE
                     </td>
                     <td>
