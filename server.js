@@ -27,6 +27,7 @@ app.get('/shows/:userId', getData.getShows)
 app.get('/prints/:userId', getData.getPrints)
 app.get('/posts/:userId', getData.getPosts)
 app.post('/details/:userId', getData.editDetails)
+app.post('/interests/:userId', getData.editInterests)
 
 // Web server invocation.. starts listening for connection requests here
 app.listen(3001, function () {

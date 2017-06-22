@@ -6,14 +6,39 @@ export default class Interests extends Component {
   constructor(props) {
     super();
     this.state = {
-      interests: undefined
-    }
+      interests: undefined,
+      show: true
+    };
+
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
   getInterests() {
     axios.get(`http://localhost:3001/interests/` + this.props.userId)
       .then(res => {
         this.setState({ interests: res.data });
       });
+  }
+  handleClick(e) {
+    this.setState({ show: !this.state.show });
+  }
+  handleSubmit(e) {
+    e.preventDefault();
+    var interests = this.state.interests[0];
+    var self = this;
+
+    ['general', 'music', 'movies', 'television', 'books', 'heroes']
+    .forEach(function(fieldToChange) {
+      interests[fieldToChange] = document.querySelector('[name="'+fieldToChange+'"]').value;
+    })
+    
+    axios.post('http://localhost:3001/interests/' + this.props.userId, interests)
+    .then(function successcallback(response){
+      self.state.show = true;
+      self.forceUpdate();
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
   }
   render() {
     if (!this.state.interests) {
@@ -24,6 +49,13 @@ export default class Interests extends Component {
     } else {
       return (
         <div id="interests">
+          <table><tbody>
+            <tr>
+              <th> Interests </th>
+              <td> <button onClick={ () => this.handleClick() }>View/Edit</button> </td>
+            </tr>
+          </tbody></table>
+          <ToggleDisplay show={this.state.show}>
           {
             this.state.interests.map((interest, index) => {
               return (
@@ -56,8 +88,119 @@ export default class Interests extends Component {
               );
             })
           }
+        </ToggleDisplay>
+        <ToggleDisplay hide={this.state.show}>
+          {
+            this.state.interests.map((interest, index) => {
+              return (
+              <form key={index} onSubmit={event => this.handleSubmit(event)}  >
+                <table ><tbody>
+                  <tr>
+                    <td>General:</td>
+                    <td>
+                      <textarea
+                        name="general"
+                        value={this.state.general}
+                        onChange={this.handleChange}
+                        defaultValue={interest.general} />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Music:</td>
+                    <td >
+                      <textarea
+                        name="music"
+                        value={this.state.music}
+                        onChange={this.handleChange}
+                        defaultValue={interest.music} />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Movies:</td>
+                    <td>
+                      <textarea
+                        name="movies"
+                        value={this.state.movies}
+                        onChange={this.handleChange}
+                        defaultValue={interest.movies} />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Television:</td>
+                    <td>
+                      <textarea
+                        name="television"
+                        value={this.state.television}
+                        onChange={this.handleChange}
+                        defaultValue={interest.television} />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>books:</td>
+                    <td>
+                      <textarea
+                        name="books"
+                        value={this.state.books}
+                        onChange={this.handleChange}
+                        defaultValue={interest.books} />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>heroes:</td>
+                    <td>
+                      <textarea
+                        name="heroes"
+                        value={this.state.heroes}
+                        onChange={this.handleChange}
+                        defaultValue={interest.heroes} />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <button onSubmit={ this.handleSubmit }>Submit</button>
+                    </td>
+                  </tr>
+                </tbody></table>
+              </form>
+              );
+            })
+          }
+        </ToggleDisplay>
         </div>
       )
     }
+  }
+}
+
+function isDefined(val) { return val != null; }
+class ToggleDisplay extends Component {
+  propTypes: {
+    hide: React.PropTypes.bool,
+    show: React.PropTypes.bool
+  }
+  shouldHide(props) {
+    var shouldHide;
+    if(isDefined(this.props.show)) { 
+      shouldHide = !this.props.show;
+    }
+    else if(isDefined(this.props.hide)) {
+      shouldHide = this.props.hide;
+    }
+    else {
+      shouldHide = false;
+    }
+
+    return shouldHide;    
+  }
+  render() {
+    var style = {};
+    
+    if(this.shouldHide()) {
+      style.display = 'none';
+    }
+
+    return (
+      <div style={style} {...this.props} />
+    );
   }
 }

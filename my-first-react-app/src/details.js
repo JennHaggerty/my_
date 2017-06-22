@@ -9,48 +9,36 @@ export default class Details extends Component {
       details: undefined,
       show: true };
 
-    this.handleChange = this.handleChange.bind(this);
+    //this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
   getDetails() {
     axios.get(`http://localhost:3001/details/` + this.props.userId)
       .then(res => {
         this.setState({ 
-          details: res.data,
-          showChild: false });
+          details: res.data
+          //showChild: false 
+        });
       });
   }
-  //TOGGLE edit and view here
   handleClick(e) {
     this.setState({ show: !this.state.show });
   }
-  handleChange(e) {
-    const target = e.target;
-    const value = target.value;
-    const name = target.name;
-
-    this.setState({
-      [name]: value
-    });
-  }
   handleSubmit(e) {
     e.preventDefault();
-    var status = document.querySelector('[name="status"]').value
-    // change below to look like ^
-    axios.post('http://localhost:3001/details/' + this.props.userId, {
-      status: status,
-      hereFor: this.hereFor,
-      hometown: this.hometown,
-      bodyType: this.bodyType,
-      ethnicity: this.ethnicity,
-      sign: this.sign,
-      smoke: this.smoke,
-      drink: this.drink,
-      education: this.education,
-      occupation: this.occupation
+    var details = this.state.details[0];
+    var self = this;
+    ['status','hereFor', 'hometown', 'bodyType', 'ethnicity', 'sign', 'smoke', 
+     'drink', 'education', 'occupation']
+    .forEach(function (fieldToChange) {
+      details[fieldToChange] = document.querySelector('[name="'+fieldToChange+'"]').value;
     })
-    .then(function(response){
-      alert('Changes submitted.')
+    axios.post('http://localhost:3001/details/' + this.props.userId, details)
+    .then(function successcallback(response){
+      // update the component state
+      self.state.show = true;
+      // re-render the component
+      self.forceUpdate();
     })
     .catch(function (error) {
       console.log(error);
@@ -70,6 +58,7 @@ export default class Details extends Component {
             <th> Details </th>
             <td> <button onClick={ () => this.handleClick() }>View/Edit</button> </td>
           </tr>
+        </tbody></table>
         <ToggleDisplay show={this.state.show}>
           {
             this.state.details.map((detail, index) => {
@@ -120,13 +109,14 @@ export default class Details extends Component {
           {
             this.state.details.map((detail, index) => {
               return (
-              <form onSubmit={event => this.handleSubmit(event)}  >
-                <table key={index}><tbody>
+              <form key={index} onSubmit={event => this.handleSubmit(event)}  >
+                <table ><tbody>
                   <tr>
                     <td>Status:</td>
                     <td>
                       <input
                         name="status"
+                        type="text"
                         value={this.state.status}
                         onChange={this.handleChange}
                         defaultValue={detail.status} />
@@ -229,7 +219,7 @@ export default class Details extends Component {
             })
           }
         </ToggleDisplay>
-        </tbody></table>
+        
         </div>
       )
     }
@@ -264,7 +254,7 @@ class ToggleDisplay extends Component {
     }
 
     return (
-      <span style={style} {...this.props} />
+      <div style={style} {...this.props} />
     );
   }
 }
