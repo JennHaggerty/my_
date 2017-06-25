@@ -1,0 +1,265 @@
+html
+	head
+		title JENNNNNNNNN
+		link(rel='stylesheet' href='/css/stylesheet.css')
+		link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css')
+
+		script(src="https://code.jquery.com/jquery-2.2.4.min.js", integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=", crossorigin="anonymous")
+		script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js", integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa", crossorigin="anonymous")
+
+		script(src='/js/myJs.js')
+
+		//my styles
+		style.
+			a:hover {
+				color: red;
+			}
+
+			td {
+				border-bottom: 2px solid white;
+				padding: 5px;
+				background: #d5e8fb;
+			}
+
+	body
+		//top container with menus and banners
+		.container.top
+			.row
+				.container
+					.pull-left
+						a.top Home 
+						a.top Profile
+					.pull-right 
+						a.top Help
+					center 
+						a.top Search
+			
+				.container.nav
+					center
+						a(href='#') Home
+						a(href='#') Browse
+						a(href='#') Search
+						a(href='#') Invite
+						a(href='#') Rank
+						a(href='#') Mail
+						a(href='#') Blog
+						a(href='#') Favorites
+						a(href='#') Forum
+						a(href='#') Groups
+						a(href='#') Events
+						a(href='#') Videos
+						a(href='#') Music
+						a(href='#') Classifieds
+
+		.container.body
+
+			//left side
+			.col-md-5
+				div#user-info 
+					h4= userName
+					.col-xs-8
+							center image
+							center View More Pics
+					.col-xs-4
+						p
+							| #{userSex}
+							br
+							| #{userAge}
+						p 
+							| #{city}, #{state}
+							br
+							| United States
+						
+						p Last Login: #{lastLogin}
+				
+				div#contact-user
+					table
+						thead
+							tr 
+								th Contacting #{userName}
+								th 
+						tbody
+							tr
+								td.contact Send Message
+								td.contact Forward to Friend
+							tr 
+								td.contact Add to Friends
+								td.contact Add to Favorites
+							tr
+								td.contact Instant Message
+								td.contact Block User
+							tr
+								td.contact Add to Group
+								td.contact Rank User
+
+				div#user-details
+					table
+						thead 
+							th(data-toggle='collapse', href='#interests', aria-controls='interests', aria-expanded) Interests
+							th(data-toggle='collapse', href='#interests', aria-controls='interests' aria-expanded)
+
+						tbody.collapsed(id='interests')
+							tr
+								td.title General
+								td= general 
+							tr
+								td.title Music
+								td= music
+							tr
+								td.title Movies
+								td= movies 
+							tr
+								td.title Television
+								td= television
+							tr
+								td.title Books
+								td= books
+							tr 
+								td.title Heroes
+								td= heroes
+
+					table
+						thead
+							tr
+								th(data-toggle='collapse', href='#details', aria-controls='details') Details
+								th(data-toggle='collapse', href='#details', aria-controls='details')
+						tbody.collapsed(id='details')
+							tr
+								td.title Status:
+								td= status
+							tr
+								td.title Here for:
+								td= hereFor
+							tr
+								td.title Hometown:
+								td= hometown
+							tr
+								td.title Body Type:
+								td= bodyType
+							tr
+								td.title Ethnicity: 
+								td= ethnicity
+							tr 
+								td.title Sign:
+								td= sign
+							tr
+								td.title Smoke / Drink:
+								td #{smoke} / #{drink}
+							tr
+								td.title Education:
+								td= education
+							tr
+								td.title Occupation:
+								td= occupation
+					table
+						thead
+							tr
+								th(data-toggle='collapse', href='#schools', aria-controls='schools') Schools
+								th(data-toggle='collapse', href='#schools', aria-controls='schools')
+						tbody.collapsed(id='schools')
+							for school in schools
+								tr
+									td.extra
+										a(href=school.schoolUrl) #{school.schoolName} 
+										br
+										| #{school.city}, #{school.state}
+										br
+										| Grad Year: #{school.gradYear} 
+										br
+										| Student Status: #{school.studentStatus}
+										br
+										| Degree: #{school.degree}
+										br
+										| Major: #{school.major}
+									td
+										center
+											| From #{school.yearStarted}
+											br
+											| to
+											br
+											| #{school.yearFinished}
+					table
+						thead
+							tr
+								th(data-toggle='collapse', href='#shows', aria-controls='shows') Shows
+								th(data-toggle='collapse', href='#shows', aria-controls='shows')
+						tbody.collapsed(id='shows')
+							for show in shows
+								tr
+									td.extra
+										| #{show.title} 
+										br
+										a(href=show.venueLink) #{show.venueName}
+										br
+										| #{show.location}
+										br
+										| #{show.showType}
+									td 
+										center
+											| #{show.showDate}
+
+					table
+						thead
+							tr
+								th(data-toggle='collapse', href='#prints', aria-controls='prints') In Print
+								th(data-toggle='collapse', href='#prints', aria-controls='prints')
+						tbody.collapsed(id='prints')
+							for print in prints
+								tr
+									td.extra
+										| #{print.seriesName} 
+										br
+										a(href=print.printUrl) #{print.printName}
+										br
+										| #{print.location}
+										br
+										| #{print.printType}
+									td 
+										center
+											| #{print.printDate}
+
+			//right side of page
+			.col-md-7
+				div#extended-network #{userName} is in your extended network
+
+				//most recent posts
+				div#latest-blog-entry
+					h5 #{userName}'s Latest Blog Entry
+					- ul
+						for post in latestPosts
+							div #{post.title} (view more)
+					a [View All Blog Entries]
+
+				//blurbs
+				div#blurbs
+					h5.orange #{userName}'s Blurbs
+					h5.miniOrange About me:
+					p #{about}
+
+					h5.miniOrange Who I'd like to meet:
+					p #{meet}
+
+				//friends
+				div#friends
+					h5.orange #{userName}'s Friend Space
+					b #{userName} has xxx Friends.
+			
+				//all posts
+				div#posts
+					h5.orange #{userName}'s comments
+					p Displaying 15 of 
+						span.redtext #{totalPosts} 
+						posts 
+						a (View All posts)
+					table.posts
+						tbody
+							for post in posts
+								tr 
+									td.postTitle 
+										center 
+											a(href=post.link) #{post.title}
+											br 
+											| post photo
+									td.post
+										b #{post.date}
+										p #{post.post}

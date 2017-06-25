@@ -4,6 +4,7 @@ import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import axios from 'axios';
+import Header from './header';
 import Details from './details';
 import Interests from './interests';
 import Schools from './schools';
@@ -26,11 +27,12 @@ class App extends Component {
 
   getUser() {
     var url = window.location.hash.slice(1);
-    axios.get(`http://localhost:3001/` + url)
+    axios.get(`http://192.168.1.110:3001/` + url)
       .then(res => {
         this.setState({ user: res.data });
       });
   }
+  
 
   render() {
     if (!this.state.user.id) {
@@ -41,7 +43,7 @@ class App extends Component {
       return (
         <Grid>
           <Row>
-
+            <Header />
             <Col md={5}>
               <div id = "user-info">
                 {user.name}
