@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import './App.css';
-import axios from 'axios';
 import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
-import App from './App';
+import Login from './login';
 
 var styles = {
   header: {
-    textAlign: "center",
-    color: "#ffffff"
+    textAlign: "center"
   },
     controls: {
       background: "#013398"
@@ -35,24 +33,27 @@ export default class Header extends Component {
       <Row>
         <Col md={12}>
         <div id="header" style={styles.header}>
+          
           <div id="controls" style={styles.controls}>
             <Row>
               <Col xs={12}>
-                <Home />
                   <Col id="home" xs={4}>
+                    <a href="/">Home</a>
                   </Col>
                   <Col id="search" xs={4}>
                     Search Bar
                   </Col>
                   <Col id="login" xs={4}>
-                    SignUp
+                    <Login />
                   </Col>
               </Col>
             </Row>
+            
             <div id="banner">
               <img style={{width: 730, height: 100}} src="http://i.imgur.com/kNpUpOm.jpg" alt=" " />
             </div>
           </div>
+          
           <div id="navigation" style={styles.navigation}>
             <table><tbody>
               <tr>
@@ -75,6 +76,7 @@ export default class Header extends Component {
               </tr>
             </tbody></table>
           </div>
+
          </div>
         </Col>
       </Row>
@@ -86,21 +88,17 @@ class Home extends Component {
   constructor(props) {
     super();
     this.state = {
-      refresh: false
+      refresh: true
     };
 
     this.handleClick = this.handleClick.bind(this);
   }
-  handleClick(e) {
-    var self = this;
-    self.setState = true;
-    if (self.refresh === true) {
-      window.location.href = e.target.href;
-    }
-  }
+  onClicked = function(e){
+e.stopPropagation();
+}
   render() {
     return (
-      <a onClick={this.handleClick.bind(this)} {...this.props}>Home</a>
+      <a href={this.props.url} onClick={this.onClicked} data-url={this.props.url}>Home</a>
     )
     
   }

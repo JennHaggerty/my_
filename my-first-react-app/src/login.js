@@ -1,77 +1,94 @@
 import React, { Component } from 'react';
 import './App.css';
-import './config';
+import axios from 'axios';
+
+//import './config';
+
+var styles = {
+  a: {
+    color: "#ffffff"
+  }
+}
+
 
 export default class Login extends Component {
-  var passport = require('passport')
-    , LocalStrategy = require('passport-local').Strategy;
-  
-  passport.use(new LocalStrategy({
-      usernameField: 'email',
-      passwordField: 'passwd'
-    },
-    function(username, password, done) {
-      User.findOne({ username: username }, function(err, user) {
-        if (err) { return done(err); }
-        if (!user) {
-          return done(null, false, { message: 'Incorrect username.' });
-        }
-        if (!user.validPassword(password)) {
-          return done(null, false, { message: 'Incorrect password.' });
-        }
-        return done(null, user);
-      });
-    }
-  ));
+  constructor(props) {
+    super();
+    this.state = { 
+      show: true };
+
+    //this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+  handleClick(e) {
+    this.setState({ show: !this.state.show });
+  }
+  handleSubmit(e) {
+    e.preventDefault();
+    var details = {};
+    var self = this;
+    ['email', 'password']
+    .forEach(function (fieldToChange) {
+      details[fieldToChange] = document.querySelector('[name="'+fieldToChange+'"]').value;
+    })
+    axios.post('http://localhost:3001/login', details)
+    .then(function successcallback(response){
+      // update the component state
+//      self.state.show = true;
+      // re-render the component
+      self.forceUpdate();
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
 
   render () {
     return (
-      <form action="/login" method="post">
-        <div>
-            <label>Username:</label>
-            <input type="text" name="username"/>
-        </div>
-        <div>
-            <label>Password:</label>
-            <input type="password" name="password"/>
-        </div>
-        <div>
-            <input type="submit" value="Log In"/>
-        </div>
-      </form>
+      <div><a onClick={ () => this.handleClick() }>Login</a>
+        <ToggleDisplay hide={this.state.show}>
+          <form onSubmit={event => this.handleSubmit(event)}>
+            <div>
+                <input type="text" placeholder="email" name="email"/> <br />
+                <input type="password" placeholder="password" name="password"/> <br />
+                <input type="submit" value="Log In"/>
+            </div>
+          </form>
+        </ToggleDisplay>
+      </div>
     );
   }
 }
 
-//// Using steps from blog prior to using Passportjs: 
-//// https://auth0.com/blog/adding-authentication-to-your-react-flux-app/#
-//  constructor() {
-//    this.state = {
-//      user: ‘’,
-//      password: ‘’
-//    };
-//  }
-//
-//  // This will be called when the user clicks on the login button
-//  login(e) {
-//    e.preventDefault();
-//    // Here, we call an external AuthService. We’ll create it in the next step
-//    Auth.login(this.state.user, this.state.password)
-//      .catch(function(err) {
-//        console.log(“Error logging in”, err);
-//      });
-//  }
-//
-//  render() {
-//    return (
-//        <form role=“form”>
-//        <div className=“form-group”>
-//          <input type=“text” valueLink={this.linkState(‘user’)}placeholder=“Username” />
-//          <input type=“password” valueLink={this.linkState(‘password’)} placeholder=“Password” />
-//        </div>
-//        <button type=“submit” onClick={this.login.bind(this)}>Submit</button>
-//      </form>
-//    </div>
-//    );
-//  }
-//}
+function isDefined(val) { return val != null; }
+class ToggleDisplay extends Component {
+  propTypes: {
+    hide: React.PropTypes.bool,
+    show: React.PropTypes.bool
+  }
+  shouldHide(props) {
+    var shouldHide;
+    if(isDefined(this.props.show)) { 
+      shouldHide = !this.props.show;
+    }
+    else if(isDefined(this.props.hide)) {
+      shouldHide = this.props.hide;
+    }
+    else {
+      shouldHide = false;
+    }
+
+    return shouldHide;    
+  }
+  render() {
+    var style = {};
+    
+    if(this.shouldHide()) {
+      style.display = 'none';
+    }
+
+    return (
+      <div style={style} {...this.props} />
+    );
+  }
+}

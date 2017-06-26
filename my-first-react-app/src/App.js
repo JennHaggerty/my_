@@ -43,7 +43,10 @@ class App extends Component {
       return (
         <Grid>
           <Row>
-            <Header />
+            <Col md={12}>
+              <Header />
+            </Col>
+            
             <Col md={5}>
               <div id = "user-info">
                 {user.name}
