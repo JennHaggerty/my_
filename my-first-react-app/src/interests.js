@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
 import './App.css';
 import axios from 'axios';
+import ToggleDisplay from './toggledisplay';
 
 export default class Interests extends Component {
   constructor(props) {
-    super();
+    super(props);
     this.state = {
       interests: undefined,
-      show: true
+      show: true,
+      secretData: ''
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+
   getInterests() {
     axios.get(`http://localhost:3001/interests/` + this.props.userId)
       .then(res => {
@@ -30,8 +33,10 @@ export default class Interests extends Component {
     .forEach(function(fieldToChange) {
       interests[fieldToChange] = document.querySelector('[name="'+fieldToChange+'"]').value;
     })
-    
-    axios.post('http://localhost:3001/interests/' + this.props.userId, interests)
+    axios.post('http://localhost:3001/interests/' + this.props.userId,
+      interests, {
+      headers: {'Authorization': localStorage.token}
+    })
     .then(function successcallback(response){
       self.state.show = true;
       self.forceUpdate();
@@ -52,7 +57,11 @@ export default class Interests extends Component {
           <table><tbody>
             <tr>
               <th> Interests </th>
-              <td> <button onClick={ () => this.handleClick() }>View/Edit</button> </td>
+              <th>
+              {
+                this.props.loggedIn && <button onClick={ () => this.handleClick() }>View/Edit</button>
+              }
+              </th>
             </tr>
           </tbody></table>
           <ToggleDisplay show={this.state.show}>
@@ -169,38 +178,5 @@ export default class Interests extends Component {
         </div>
       )
     }
-  }
-}
-
-function isDefined(val) { return val != null; }
-class ToggleDisplay extends Component {
-  propTypes: {
-    hide: React.PropTypes.bool,
-    show: React.PropTypes.bool
-  }
-  shouldHide(props) {
-    var shouldHide;
-    if(isDefined(this.props.show)) { 
-      shouldHide = !this.props.show;
-    }
-    else if(isDefined(this.props.hide)) {
-      shouldHide = this.props.hide;
-    }
-    else {
-      shouldHide = false;
-    }
-
-    return shouldHide;    
-  }
-  render() {
-    var style = {};
-    
-    if(this.shouldHide()) {
-      style.display = 'none';
-    }
-
-    return (
-      <div style={style} {...this.props} />
-    );
   }
 }

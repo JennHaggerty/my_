@@ -1,24 +1,24 @@
 import React, { Component } from 'react';
 import './App.css';
 import axios from 'axios';
+import ToggleDisplay from './toggledisplay';
 
 export default class Details extends Component {
   constructor(props) {
-    super();
+    super(props);
     this.state = { 
       details: undefined,
-      show: true };
+      show: true,
+      secretData: ''
+    };
 
-    //this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+
   getDetails() {
     axios.get(`http://localhost:3001/details/` + this.props.userId)
       .then(res => {
-        this.setState({ 
-          details: res.data
-          //showChild: false 
-        });
+        this.setState({  details: res.data });
       });
   }
   handleClick(e) {
@@ -28,12 +28,16 @@ export default class Details extends Component {
     e.preventDefault();
     var details = this.state.details[0];
     var self = this;
+
     ['status','hereFor', 'hometown', 'bodyType', 'ethnicity', 'sign', 'smoke', 
      'drink', 'education', 'occupation']
     .forEach(function (fieldToChange) {
       details[fieldToChange] = document.querySelector('[name="'+fieldToChange+'"]').value;
     })
-    axios.post('http://localhost:3001/details/' + this.props.userId, details)
+    axios.post('http://localhost:3001/details/' + this.props.userId, 
+      details, {
+      headers: {'Authorization': localStorage.token}
+    })
     .then(function successcallback(response){
       // update the component state
       self.state.show = true;
@@ -56,7 +60,11 @@ export default class Details extends Component {
         <table><tbody>
           <tr>
             <th> Details </th>
-            <td> <button onClick={ () => this.handleClick() }>View/Edit</button> </td>
+            <th>
+              {
+                this.props.loggedIn && <button onClick={ () => this.handleClick() }>View/Edit</button> 
+              } 
+            </th>
           </tr>
         </tbody></table>
         <ToggleDisplay show={this.state.show}>
@@ -223,38 +231,5 @@ export default class Details extends Component {
         </div>
       )
     }
-  }
-}
-
-function isDefined(val) { return val != null; }
-class ToggleDisplay extends Component {
-  propTypes: {
-    hide: React.PropTypes.bool,
-    show: React.PropTypes.bool
-  }
-  shouldHide() {
-    var shouldHide;
-    if(isDefined(this.props.show)) { 
-      shouldHide = !this.props.show;
-    }
-    else if(isDefined(this.props.hide)) {
-      shouldHide = this.props.hide;
-    }
-    else {
-      shouldHide = false;
-    }
-
-    return shouldHide;    
-  }
-  render() {
-    var style = {};
-    
-    if(this.shouldHide()) {
-      style.display = 'none';
-    }
-
-    return (
-      <div style={style} {...this.props} />
-    );
   }
 }

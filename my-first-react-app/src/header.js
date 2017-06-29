@@ -1,40 +1,45 @@
 import React, { Component } from 'react';
 import './App.css';
-import Grid from 'react-bootstrap/lib/Grid';
+import axios from 'axios';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import Login from './login';
-
-var styles = {
-  header: {
-    textAlign: "center"
-  },
-    controls: {
-      background: "#013398"
-    },
-    banner: {
-      
-    },
-    navigation:{
-      background: "#6698cb"
-    },
-}
+import Logout from './logout';
 
 export default class Header extends Component {
   constructor(props) {
-    super();
+    super(props);
     this.state = {
       show: true
     }
+  }
+  handleSubmit(e) {
+    e.preventDefault();
+    var details = this.state.details[0];
+    var self = this;
+
+    axios.post('http://localhost:3001/' + this.props.userId, 
+      details, {
+      headers: {'Authorization': localStorage.token}
+    })
+    .then(function successcallback(response){
+      // update the component state
+      //self.state.show = true;
+      // re-render the component
+      self.forceUpdate();
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
   }
 
   render() {
     return (
       <Row>
         <Col md={12}>
-        <div id="header" style={styles.header}>
+        <div id="header">
           
-          <div id="controls" style={styles.controls}>
+          <div id="controls">
             <Row>
               <Col xs={12}>
                   <Col id="home" xs={4}>
@@ -44,17 +49,18 @@ export default class Header extends Component {
                     Search Bar
                   </Col>
                   <Col id="login" xs={4}>
-                    <Login />
+                    <Login toggleLogin={this.props.toggleLogin} />
+                    <Logout toggleLogin={this.props.toggleLogin} />
                   </Col>
               </Col>
             </Row>
             
             <div id="banner">
-              <img style={{width: 730, height: 100}} src="http://i.imgur.com/kNpUpOm.jpg" alt=" " />
+              
             </div>
           </div>
           
-          <div id="navigation" style={styles.navigation}>
+          <div id="navigation">
             <table><tbody>
               <tr>
                 <td>
@@ -81,59 +87,5 @@ export default class Header extends Component {
         </Col>
       </Row>
     )
-  }
-}
-
-class Home extends Component {
-  constructor(props) {
-    super();
-    this.state = {
-      refresh: true
-    };
-
-    this.handleClick = this.handleClick.bind(this);
-  }
-  onClicked = function(e){
-e.stopPropagation();
-}
-  render() {
-    return (
-      <a href={this.props.url} onClick={this.onClicked} data-url={this.props.url}>Home</a>
-    )
-    
-  }
-}
-
-
-function isDefined(val) { return val != null; }
-class ToggleDisplay extends Component {
-  propTypes: {
-    hide: React.PropTypes.bool,
-    show: React.PropTypes.bool
-  }
-  shouldHide(props) {
-    var shouldHide;
-    if(isDefined(this.props.show)) { 
-      shouldHide = !this.props.show;
-    }
-    else if(isDefined(this.props.hide)) {
-      shouldHide = this.props.hide;
-    }
-    else {
-      shouldHide = false;
-    }
-
-    return shouldHide;    
-  }
-  render() {
-    var style = {};
-    
-    if(this.shouldHide()) {
-      style.display = 'none';
-    }
-
-    return (
-      <div style={style} {...this.props} />
-    );
   }
 }

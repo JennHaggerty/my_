@@ -19,9 +19,15 @@ import Posts from './posts';
 class App extends Component {
   constructor(props) {
     super(props);
-
+    var self = this;
     this.state = {
-      user: {}
+      user: {},
+      loggedIn: false,
+      toggleLogin: function(value) {
+        self.setState({
+          loggedIn: value
+        }) 
+      }
     };
   }
 
@@ -29,7 +35,9 @@ class App extends Component {
     var url = window.location.hash.slice(1);
     axios.get(`http://192.168.1.110:3001/` + url)
       .then(res => {
-        this.setState({ user: res.data });
+        this.setState({ 
+          user: res.data
+        });
       });
   }
   
@@ -43,11 +51,11 @@ class App extends Component {
       return (
         <Grid>
           <Row>
-            <Col md={12}>
-              <Header />
+            <Col lg={12}>
+              <Header toggleLogin={this.state.toggleLogin} />
             </Col>
             
-            <Col md={5}>
+            <Col lg={5}>
               <div id = "user-info">
                 {user.name}
                 <div><img style={{width: 150, height: 150}} src="https://pbs.twimg.com/profile_images/868231878989541377/xgtoREGN_400x400.jpg" alt='' /></div>
@@ -57,23 +65,23 @@ class App extends Component {
                 {user.email}
               </div>
   
-              <Interests userId={user.id} />
+              <Interests userId={user.id} loggedIn={this.state.loggedIn} />
 
-              <Details userId={user.id} />
+              <Details userId={user.id} loggedIn={this.state.loggedIn} />
               
-              <Schools userId={user.id} />
+              <Schools userId={user.id} loggedIn={this.state.loggedIn} />
   
-              <Shows userId={user.id} />
+              <Shows userId={user.id} loggedIn={this.state.loggedIn} />
   
-              <Prints userId={user.id} />
+              <Prints userId={user.id} loggedIn={this.state.loggedIn} />
             </Col>
     
-            <Col md={7}>
+            <Col lg={7}>
               <div id = "extended-network">
                 {user.name} is in your extended network.
               </div>
 
-              <Posts userId={user.id} />
+              <Posts userId={user.id} loggedIn={this.state.loggedIn} />
             </Col>
 
           </Row>
