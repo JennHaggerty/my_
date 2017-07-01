@@ -19,6 +19,7 @@ import Posts from './posts';
 class App extends Component {
   constructor(props) {
     super(props);
+
     var self = this;
     this.state = {
       user: {},
@@ -29,6 +30,12 @@ class App extends Component {
         }) 
       }
     };
+  }
+
+  componentWillMount() {
+    if(localStorage.token && this.state.loggedIn === false) {
+      this.state.toggleLogin(true)
+    }
   }
 
   getUser() {
@@ -43,6 +50,7 @@ class App extends Component {
   
 
   render() {
+    
     if (!this.state.user.id) {
       this.getUser.call(this);
       return <div>Fetching user data</div>

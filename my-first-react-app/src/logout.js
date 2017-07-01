@@ -7,28 +7,26 @@ export default class Logout extends Component {
   constructor(props) {
     super(props);
     this.state = { 
-      show: true};
+      show: false};
 
-    this.handleClick = this.handleClick.bind(this);
-  }
-
-  handleClick(e) {
-    this.setState({ show: !this.state.show });
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleSubmit(e) {
     var self = this;
     localStorage.removeItem('token');
+    self.state.show = false;
     self.forceUpdate();
   }
 
 
   render () {
     return (
-      <form onSubmit={event => this.handleSubmit(event)}>
-        <a type="submit" onClick={ () => this.handleClick() }>Logout</a>
-      </form>
-      
+      <div id="logout">
+      {
+        this.props.loggedIn && <button type="submit" onSubmit={ () => this.handleSubmit()}>Logout</button>
+      }
+      </div>
     );
   }
 }
