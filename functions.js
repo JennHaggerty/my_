@@ -265,8 +265,94 @@ function editDetails (req, res, next) {
 		res.send('something went wrong');
 	})
 }
+function editSchools (req, res, next) {
+	var userId = req.params.userId;
+	var schools = {};
+	if (!req.body) {
+		return res.send('no data provided!!');
+	}
 
+	if (req.body.status) {
+		schools.schoolName = req.body.schoolName;
+	}
+	if (req.body.schoolUrl) {
+		schools.schoolUrl = req.body.schoolUrl;
+	}
+	if (req.body.studentStatus) {
+		schools.studentStatus = req.body.studentStatus;
+	}
+	if (req.body.degree) {
+		schools.degree = req.body.degree;
+	}
+	if (req.body.major) {
+		schools.major = req.body.major;
+	}
+	if (req.body.yearStarted) {
+		schools.yearStarted = req.body.yearStarted;
+	}
+	if (req.body.yearFinished) {
+		schools.yearFinished = req.body.yearFinished;
+	}
+	if (req.body.city) {
+		schools.city = req.body.city;
+	}
+	if (req.body.state) {
+		schools.state = req.body.state;
+	}
 
+	knex('schools').where('userId', userId).update(schools)
+	.then(function(){
+		res.send(schools);	
+	})
+	.catch(function (err) {
+		console.log(err);
+		res.send('something went wrong');
+	})
+}
+function addSchools (req, res, next) {
+//	var userId = req.params.userId;
+//	var schools = {};
+//	if (!req.body) {
+//		return res.send('no data provided!!');
+//	}
+//
+//	if (req.body.status) {
+//		schools.schoolName = req.body.schoolName;
+//	}
+//	if (req.body.schoolUrl) {
+//		schools.schoolUrl = req.body.schoolUrl;
+//	}
+//	if (req.body.studentStatus) {
+//		schools.studentStatus = req.body.studentStatus;
+//	}
+//	if (req.body.degree) {
+//		schools.degree = req.body.degree;
+//	}
+//	if (req.body.major) {
+//		schools.major = req.body.major;
+//	}
+//	if (req.body.yearStarted) {
+//		schools.yearStarted = req.body.yearStarted;
+//	}
+//	if (req.body.yearFinished) {
+//		schools.yearFinished = req.body.yearFinished;
+//	}
+//	if (req.body.city) {
+//		schools.city = req.body.city;
+//	}
+//	if (req.body.state) {
+//		schools.state = req.body.state;
+//	}
+//
+//	knex('schools').where('userId', userId).insert({schools})
+//	.then(function(){
+//		res.send(schools);	
+//	})
+//	.catch(function (err) {
+//		console.log(err);
+//		res.send('something went wrong');
+//	})
+}
 
 
 
@@ -279,6 +365,8 @@ module.exports = {
    getFriends,
    getPosts,
    getSchools,
+   editSchools,
+   addSchools,
    getShows,
    getPrints,
    editDetails,

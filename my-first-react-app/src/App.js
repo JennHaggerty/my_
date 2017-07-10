@@ -86,7 +86,7 @@ class App extends Component {
               <User userId={user.id} loggedIn={this.state.loggedIn} />
               
               <div id = "contact">
-                {user.email}
+                contact info
               </div>
   
               <Interests userId={user.id} loggedIn={this.state.loggedIn} />

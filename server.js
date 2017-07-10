@@ -64,7 +64,7 @@ app.get('/posts/:userId', getData.getPosts)
 app.post('/user/:userId', am, getData.editUser)
 app.post('/details/:userId', am, getData.editDetails)
 app.post('/interests/:userId', am, getData.editInterests)
-
+app.post('/schools/:userId', am, getData.editSchools, getData.addSchools)
 
 // user login
 //app.post('/:user', getUser.getUsers)

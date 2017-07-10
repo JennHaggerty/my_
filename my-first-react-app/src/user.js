@@ -28,11 +28,11 @@ export default class User extends Component {
     var users = this.state.user;//s[0];
     var self = this;
 
-    [ 'name', /*'email', 'url',*/ 'city', 'state', 'country', 'sex']
+    [ 'name', 'email', 'city', 'state', 'country', 'sex']
     .forEach(function (fieldToChange) {
       users[fieldToChange] = document.querySelector('[name="'+fieldToChange+'"]').value;
     })
-    axios.post('http://localhost:3001/' + this.props.userId, 
+    axios.post('http://localhost:3001/user/' + this.props.userId, 
       users, {
       headers: {'Authorization': localStorage.token}
     })
@@ -82,7 +82,21 @@ export default class User extends Component {
               </div>
               <div className="row">
                 <div className="col-xs-8">
-                  <img style={{width: 150, height: 150}} src="https://pbs.twimg.com/profile_images/868231878989541377/xgtoREGN_400x400.jpg" alt='' />
+                  <div>
+                    {user.img}
+                  </div>
+                  { this.props.loggedIn && this.state.show
+                    ?
+                      <input
+                        name="email"
+                        value={this.state.email}
+                        onChange={this.handleChange}
+                        defaultValue={user.email} />
+                    :
+                      <div>
+                        {user.email}
+                      </div>
+                  }
                 </div>
                 <div className="col-xs-4">
                   <table><tbody>
