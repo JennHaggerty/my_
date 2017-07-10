@@ -61,6 +61,7 @@ app.get('/prints/:userId', getData.getPrints)
 app.get('/posts/:userId', getData.getPosts)
 
 // send input data from forms to DB.
+app.post('/user/:userId', am, getData.editUser)
 app.post('/details/:userId', am, getData.editDetails)
 app.post('/interests/:userId', am, getData.editInterests)
 
@@ -130,7 +131,7 @@ passport.use(new LocalStrategy({
   		}
   		// checking password against a known hash from DB
   		// set up whenever the user signs up
-			if (users[1].password !== hash) {
+			if (users[0].password !== hash) {
   			return done('try again');
 			}
   		done(null, users[0]);
@@ -159,10 +160,10 @@ app.post('/login', function(req, res, next) {
       var data = {
         email: user.email
       };
-
       return res.json({
       	token: token,
-      	data: data
+      	data: data,
+        redirect: '/'
       });
 //    req.logIn(user, function(err) {
 //      if (err) { return next(err); }

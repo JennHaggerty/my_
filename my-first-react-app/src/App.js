@@ -4,14 +4,16 @@ import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import axios from 'axios';
-import Header from './header';
+//import Header from './header';
 import Details from './details';
 import Interests from './interests';
 import Schools from './schools';
 import Shows from './shows';
 import Prints from './prints';
 import Posts from './posts';
-
+import User from './user';
+import Login from './login';
+import Logout from './logout';
 
 
 //LOOK AT ternary operation for view and editing mode: 
@@ -32,9 +34,9 @@ class App extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if(localStorage.token && this.state.loggedIn === false) {
-      this.state.toggleLogin(true)
+      this.state.toggleLogin(true);
     }
   }
 
@@ -47,7 +49,7 @@ class App extends Component {
         });
       });
   }
-  
+   
 
   render() {
     
@@ -60,14 +62,28 @@ class App extends Component {
         <Grid>
           <Row>
             <Col lg={12}>
-              <Header toggleLogin={this.state.toggleLogin} />
+              <Col id="home" xs={4}>
+                <a href={"/" + "#" + user.url}>Home</a>
+              </Col>
+              <Col id="search" xs={4}>
+                Search Bar
+              </Col>
+              <Col id="login" xs={4}>
+                { !this.state.loggedIn
+                  ? <Login toggleLogin={this.state.toggleLogin} />
+                  : " "
+                }
+                
+               { this.state.loggedIn  
+                  ? <Logout toggleLogin={this.state.toggleLogin} />
+                  : " "
+                }
+              </Col>
             </Col>
+          </Row>
             
             <Col lg={5}>
-              <div id = "user-info">
-                {user.name}
-                <div><img style={{width: 150, height: 150}} src="https://pbs.twimg.com/profile_images/868231878989541377/xgtoREGN_400x400.jpg" alt='' /></div>
-              </div>
+              <User userId={user.id} loggedIn={this.state.loggedIn} />
               
               <div id = "contact">
                 {user.email}
@@ -92,7 +108,7 @@ class App extends Component {
               <Posts userId={user.id} loggedIn={this.state.loggedIn} />
             </Col>
 
-          </Row>
+          
         </Grid>
       );
     }

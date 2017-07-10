@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import axios from 'axios';
+//import axios from 'axios';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import Login from './login';
@@ -13,25 +13,25 @@ export default class Header extends Component {
       show: true
     }
   }
-  handleSubmit(e) {
-    e.preventDefault();
-    var details = this.state.details[0];
-    var self = this;
-
-    axios.post('http://localhost:3001/' + this.props.userId, 
-      details, {
-      headers: {'Authorization': localStorage.token}
-    })
-    .then(function successcallback(response){
-      // update the component state
-      //self.state.show = true;
-      // re-render the component
-      self.forceUpdate();
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-  }
+  //handleSubmit(e) {
+  //  e.preventDefault();
+  //  var details = this.state.details[0];
+  //  var self = this;
+//
+  //  axios.post('http://localhost:3001/' + this.props.userId, 
+  //    details, {
+  //    headers: {'Authorization': localStorage.token}
+  //  })
+  //  .then(function successcallback(response){
+  //    // update the component state
+  //    //self.state.show = true;
+  //    // re-render the component
+  //    self.forceUpdate();
+  //  })
+  //  .catch(function (error) {
+  //    console.log(error);
+  //  });
+  //}
 
   render() {
     return (
@@ -49,7 +49,7 @@ export default class Header extends Component {
                     Search Bar
                   </Col>
                   <Col id="login" xs={4}>
-                    <Login toggleLogin={this.props.toggleLogin} />
+                    <Login  toggleLogin={this.props.toggleLogin} />
                     <Logout toggleLogin={this.props.toggleLogin} />
                   </Col>
               </Col>

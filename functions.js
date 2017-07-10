@@ -15,7 +15,6 @@ function getUsers(req, res, next) {
   // do something with error, maybe even just:
 	.catch(console.log)
 }
-
 function getSchools(req, res, next) {
 	var userId = req.params.userId;
 	knex.select().from('schools').where('userId', userId).orderBy('yearFinished', 'desc').then(function(schools) {
@@ -30,7 +29,6 @@ function getSchools(req, res, next) {
 		res.send(schools);
 	});
 }
-
 function getInterests(req, res, next) {
 	var userId = req.params.userId;
 	knex.select().from('interests').where('userId', userId).then(function(interests) {
@@ -47,7 +45,6 @@ function getInterests(req, res, next) {
 		res.send(interests);
 	});
 }
-
 function getDetails(req, res, next) {
 	var userId = req.params.userId;
 	knex.select().from('details').where('userId', userId).then(function(details) {
@@ -72,7 +69,6 @@ function getDetails(req, res, next) {
 		res.send(details);
 	});
 }
-
 function getBlurbs(req, res, next) {
 	var userId = req.params.userId;
 	knex.select().from('blurbs').where('userId', userId).then(function(blurbs) {
@@ -85,7 +81,6 @@ function getBlurbs(req, res, next) {
 		res.send(blurbs);
 	});
 }
-
 function getFriends(req, res, next) {
 	var userId = req.params.userId;
 	knex.select().from('friends').where('userId', userId).orderBy('dateAdded', 'desc').then(function(friends) {
@@ -99,7 +94,6 @@ function getFriends(req, res, next) {
 		res.send(friends);
 	});
 }
-
 function getShows(req, res, next) {
 	var userId = req.params.userId;
 	knex.select().from('shows').where('userId', userId).orderBy('showDate', 'desc').then(function(shows) {
@@ -118,7 +112,6 @@ function getShows(req, res, next) {
 		res.send(shows);
 	});
 }
-
 function getPrints(req, res, next) {
 	var userId = req.params.userId;
 	knex.select().from('prints').where('userId', userId).orderBy('printDate', 'desc').then(function(prints) {
@@ -133,7 +126,6 @@ function getPrints(req, res, next) {
 		res.send(prints);
 	});
 }
-
 function getPosts(req, res, next) {
 	var userId = req.params.userId;
 	knex.select().from('posts').where('userId', userId).orderBy('postDate', 'desc').then(function(posts) {
@@ -151,6 +143,46 @@ function getPosts(req, res, next) {
 	});
 }
 
+
+
+
+
+function editUser (req, res, next) {
+	var userId = req.params.userId;
+	if (!req.body) {
+		return res.send('no data provided!!');
+	}
+	if (req.body.name) {
+		users.name = req.body.name;
+	}
+	if (req.body.email) {
+		users.email = req.body.email;
+	}
+	if (req.body.birthday) {
+		users.birthday = req.body.birthday;
+	}
+	if (req.body.city) {
+		users.city = req.body.city;
+	}
+	if (req.body.state) {
+		users.state = req.body.state;
+	}
+	if (req.body.country) {
+		users.country = req.body.country;
+	}
+	if (req.body.sex) {
+		users.sex = req.body.sex;
+	}
+
+	knex('users').where('userId', userId).update(users)
+	.then(function(){
+		res.send(users);	
+	})
+	.catch(function (err) {
+		console.log(err);
+		res.send('something went wrong');
+	})
+}
 function editInterests (req, res, next) {
 	var userId = req.params.userId;
 	var interests = {};
@@ -186,7 +218,6 @@ function editInterests (req, res, next) {
 		res.send('something went wrong');
 	})
 }
-
 function editDetails (req, res, next) {
 	var userId = req.params.userId;
 	var details = {};
@@ -235,6 +266,11 @@ function editDetails (req, res, next) {
 	})
 }
 
+
+
+
+
+
 module.exports = {
    getUsers,
    getDetails,
@@ -246,5 +282,6 @@ module.exports = {
    getShows,
    getPrints,
    editDetails,
-   editInterests
+   editInterests,
+   editUser
 }

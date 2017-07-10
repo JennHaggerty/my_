@@ -6,8 +6,7 @@ import './App.css';
 export default class Logout extends Component {
   constructor(props) {
     super(props);
-    this.state = { 
-      show: false};
+    this.state = { };
 
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -15,17 +14,14 @@ export default class Logout extends Component {
   handleSubmit(e) {
     var self = this;
     localStorage.removeItem('token');
-    self.state.show = false;
-    self.forceUpdate();
+    self.props.toggleLogin(false);
   }
 
 
   render () {
     return (
-      <div id="logout">
-      {
-        this.props.loggedIn && <button type="submit" onSubmit={ () => this.handleSubmit()}>Logout</button>
-      }
+      <div id="logout" className="toggleShow">
+        <button type="submit" onClick={ () => this.handleSubmit()}>Logout</button>
       </div>
     );
   }
