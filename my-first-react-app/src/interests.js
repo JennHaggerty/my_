@@ -59,9 +59,9 @@ export default class Interests extends Component {
               <th> Interests </th>
               <th>
               {
-                this.props.loggedIn && <button onClick={ () => this.handleClick() }>View/Edit</button> 
+                this.props.loggedIn && <button onClick={ () => this.handleClick() }>Edit</button> 
               } 
-            </th>
+             </th>
             </tr>
           </tbody></table>
           {
@@ -148,12 +148,12 @@ export default class Interests extends Component {
                     }
                 </tr>
                 { this.props.loggedIn && this.state.show &&
-                    <tr>
-                      <td>
-                        <button onSubmit={ this.handleSubmit }>Submit</button>
-                      </td>
-                    </tr>
-                  }
+                  <tr>
+                    <td>
+                      <button onSubmit={ this.handleSubmit }>Submit</button>
+                    </td>
+                  </tr>
+                }
                 </tbody></table>
                 </form>
               );

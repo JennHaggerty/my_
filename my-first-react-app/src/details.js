@@ -60,7 +60,7 @@ export default class Details extends Component {
             <th> Details </th>
             <th>
               {
-                this.props.loggedIn && <button onClick={ () => this.handleClick() }>View/Edit</button> 
+                this.props.loggedIn && <button onClick={ () => this.handleClick() }>Edit</button> 
               } 
             </th>
           </tr>

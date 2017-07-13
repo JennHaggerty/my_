@@ -9,7 +9,7 @@ function getUsers(req, res, next) {
 			// no users found. move to next middleware or route
 			return next();
 		}
-
+		
 		return res.send(users[0]);
 	})
   // do something with error, maybe even just:
@@ -21,8 +21,8 @@ function getSchools(req, res, next) {
 		var schools = schools;
 
 		schools = schools.map(function(school) {
-			school.yearFinished = moment(school.yearFinished).format('YYYY');
-			school.yearStarted = moment(school.yearStarted).format('YYYY');
+			school.yearFinished = moment(school.yearFinished).format('YYYY-MM-DD HH:MM:SS');
+			school.yearStarted = moment(school.yearStarted).format('YYYY-MM-DD HH:MM:SS');
 			return school;
 		});
 
@@ -148,7 +148,8 @@ function getPosts(req, res, next) {
 
 
 function editUser (req, res, next) {
-	var userId = req.params.userId;
+	var id = req.params.userId;
+	var users = {};
 	if (!req.body) {
 		return res.send('no data provided!!');
 	}
@@ -157,6 +158,12 @@ function editUser (req, res, next) {
 	}
 	if (req.body.email) {
 		users.email = req.body.email;
+	}
+	if (req.body.password) {
+		users.password = req.body.password;
+	}
+	if (req.body.sex) {
+		users.sex = req.body.sex;
 	}
 	if (req.body.birthday) {
 		users.birthday = req.body.birthday;
@@ -170,11 +177,9 @@ function editUser (req, res, next) {
 	if (req.body.country) {
 		users.country = req.body.country;
 	}
-	if (req.body.sex) {
-		users.sex = req.body.sex;
-	}
+	
 
-	knex('users').where('userId', userId).update(users)
+	knex('users').where('id', id).update(users)
 	.then(function(){
 		res.send(users);	
 	})
@@ -268,39 +273,40 @@ function editDetails (req, res, next) {
 function editSchools (req, res, next) {
 	var userId = req.params.userId;
 	var schools = {};
+	var schoolId = req.params.schoolId;
 	if (!req.body) {
 		return res.send('no data provided!!');
 	}
 
-	if (req.body.status) {
-		schools.schoolName = req.body.schoolName;
+	if (req.body[0].schoolName) {
+		schools.schoolName = req.body[0].schoolName;
 	}
-	if (req.body.schoolUrl) {
-		schools.schoolUrl = req.body.schoolUrl;
+	if (req.body[0].schoolUrl) {
+		schools.schoolUrl = req.body[0].schoolUrl;
 	}
-	if (req.body.studentStatus) {
-		schools.studentStatus = req.body.studentStatus;
+	if (req.body[0].studentStatus) {
+		schools.studentStatus = req.body[0].studentStatus;
 	}
-	if (req.body.degree) {
-		schools.degree = req.body.degree;
+	if (req.body[0].degree) {
+		schools.degree = req.body[0].degree;
 	}
-	if (req.body.major) {
-		schools.major = req.body.major;
+	if (req.body[0].major) {
+		schools.major = req.body[0].major;
 	}
-	if (req.body.yearStarted) {
-		schools.yearStarted = req.body.yearStarted;
+	if (req.body[0].yearStarted) {
+		schools.yearStarted = req.body[0].yearStarted;
 	}
-	if (req.body.yearFinished) {
-		schools.yearFinished = req.body.yearFinished;
+	if (req.body[0].yearFinished) {
+		schools.yearFinished = req.body[0].yearFinished;
 	}
-	if (req.body.city) {
-		schools.city = req.body.city;
+	if (req.body[0].city) {
+		schools.city = req.body[0].city;
 	}
-	if (req.body.state) {
-		schools.state = req.body.state;
+	if (req.body[0].state) {
+		schools.state = req.body[0].state;
 	}
 
-	knex('schools').where('userId', userId).update(schools)
+	knex('schools').where(`id`, schoolId).update(schools)
 	.then(function(){
 		res.send(schools);	
 	})
@@ -309,6 +315,7 @@ function editSchools (req, res, next) {
 		res.send('something went wrong');
 	})
 }
+
 function addSchools (req, res, next) {
 //	var userId = req.params.userId;
 //	var schools = {};

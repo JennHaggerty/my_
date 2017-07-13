@@ -7,12 +7,12 @@ export default class User extends Component {
     super(props);
     this.state = { 
       user: undefined,
-      show: false
+      show: false,
+      age: undefined
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-
   getUser() {
     var url = window.location.hash.slice(1);
     axios.get(`http://192.168.1.110:3001/` + url)
@@ -28,9 +28,13 @@ export default class User extends Component {
     var users = this.state.user;//s[0];
     var self = this;
 
-    [ 'name', 'email', 'city', 'state', 'country', 'sex']
+    [ 'name', 'email', 'birthday', 'city', 'state', 'country', 'sex', 'password']
     .forEach(function (fieldToChange) {
-      users[fieldToChange] = document.querySelector('[name="'+fieldToChange+'"]').value;
+      var thing = document.querySelector('[name="'+fieldToChange+'"]');
+      if (!thing) {
+        debugger;
+      }
+      users[fieldToChange] = thing.value;
     })
     axios.post('http://localhost:3001/user/' + this.props.userId, 
       users, {
@@ -87,11 +91,18 @@ export default class User extends Component {
                   </div>
                   { this.props.loggedIn && this.state.show
                     ?
-                      <input
-                        name="email"
-                        value={this.state.email}
-                        onChange={this.handleChange}
-                        defaultValue={user.email} />
+                      <div>
+                        <input
+                          name="email"
+                          value={this.state.email}
+                          onChange={this.handleChange}
+                          defaultValue={user.email} /> <br/>
+                        <input
+                          name="password"
+                          value={this.state.password}
+                          onChange={this.handleChange}
+                          placeholder="change password" />
+                      </div>
                     :
                       <div>
                         {user.email}
@@ -110,6 +121,18 @@ export default class User extends Component {
                             defaultValue={user.sex} />
                           </td>
                         : <td> { user.sex } </td>
+                      }
+                    </tr>
+                    <tr>
+                      { this.props.loggedIn && this.state.show
+                        ? <td>
+                          <input
+                            name="birthday"
+                            value={this.state.birthday}
+                            onChange={this.handleChange}
+                            defaultValue={user.birthday} />
+                          </td>
+                        : <td> HOW OLD ARE YOU </td>
                       }
                     </tr>
                     <tr>

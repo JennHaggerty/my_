@@ -4,7 +4,6 @@ import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import axios from 'axios';
-//import Header from './header';
 import Details from './details';
 import Interests from './interests';
 import Schools from './schools';
@@ -63,7 +62,6 @@ class App extends Component {
           <Row>
             <Col lg={12}>
               <Col id="home" xs={4}>
-                <a href={"/" + "#" + user.url}>Home</a>
               </Col>
               <Col id="search" xs={4}>
                 Search Bar
